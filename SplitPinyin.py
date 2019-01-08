@@ -549,7 +549,6 @@ class SplitPinyin(object):
     # 2）完整的拼音，放入Viterbi算法中，通过HMM得出概率最大的输出串
     # 3）最后的非完整字符，在训练过的trie树中搜索出所有以该字符为前缀的字，以及他们出现的频率，取频率最高的若干个，作为下一个状态的可能集合
     # 4）与前面的完整拼音组合，通过Viterbi算法计算频率最高对应的最可能的中文串
-    # 怎么处理异音字呢？？？
     def split_pinyin(self, input):
         """
         Assume input is a valid pinyin sequence pre-processed.
@@ -581,17 +580,21 @@ class SplitPinyin(object):
                         print("----||tmp {} 不在拼音中".format(tmp))
                         now_idx = i
                         now_tmp = tmp
-                        ######
-                        # ????
-                        ######
-                        # Atrieve the first element after pinyin element?
-                        # tmp 非空，即当前input[0]
-                        while len(tmp) > 0 and tmp not in self.pinyin: 
-                            tmp = tmp[:-1] # tmp一直取它最后一个字符之前的所有拼音，有什么用？？？？
-                            print ("------此时的tmp[:-1] {}".format(tmp))
-                            i -= 1
-                        ######
-
+                        
+                        ###############
+                        # maybe useless
+                        # while len(tmp) > 0 and tmp not in self.pinyin: 
+                        #     tmp = tmp[:-1] # tmp一直取它最后一个字符之前的所有拼音
+                        #     i -= 1
+                        
+                        # 在这种情况下，tmp只可能是单个字符
+                        if len(tmp)>0 and tmp not in self.pinyin:
+                            tmp = tmp[:-1] # 取空
+                            # i-=1 # useless
+                            
+                        # two_part 和 many_part：不完整的拼音出现的地方
+                        # 如果是two part，就是最后一个字符是不完整的拼音(其他地方可能也有)；
+                        # 如果是many part 就是中间的字出现有不完整的拼音
                         if len(tmp) == 0:
                             # The now_tmp is not in pinyin; the input[i] is the last char
                             if idx == len(input_lis) - 1 and input[now_idx] == '$':  # 最后了
@@ -600,8 +603,8 @@ class SplitPinyin(object):
                                 print("----||two_part=True")
                                 break
                             else:
-                                res_list.append(now_tmp[0])
-                                i += 1
+                                res_list.append(now_tmp[0]) # now_tmp[0]实际上是tmp
+                                # i += 1 # useless
                                 print("----||many_part=True")
                                 many_part = True
 
@@ -615,8 +618,10 @@ class SplitPinyin(object):
                     print("--||更新tmp为 {}".format(attempt))
                     tmp = attempt
                 i += 1
+        
+        # 只有一个字符的输入        
         if len(res_list) == 1 and res_list[0] not in self.pinyin:
-            two_part = 1
+            two_part = True
         return res_list, two_part,many_part
 
 
@@ -624,4 +629,4 @@ class SplitPinyin(object):
 if __name__ == '__main__':
 
     a = SplitPinyin()
-    print(a.split_pinyin("k't"))
+    print(a.split_pinyin("k't'haq"))
