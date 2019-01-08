@@ -1,4 +1,7 @@
-# GodTian_Pinyin
+# PRML final assignment
+
+Forked from: https://github.com/whatbeg/GodTian_Pinyin
+
 A Simple Chinese Pinyin Input Method Using HMM and Some Tricks with Python
 
 ## Run this program

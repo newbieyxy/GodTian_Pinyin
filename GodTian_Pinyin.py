@@ -7,7 +7,8 @@ Date: 2016-11-13
 Author: QIU HU
 """
 
-import cPickle as pickle
+# import cPickle as pickle
+import pickle as pickle
 from Priotityset import PrioritySet
 import SplitPinyin as sp
 import re
@@ -17,7 +18,7 @@ MIN_PROB = -500.0  # after log
 import time
 import collections
 
-
+# transition possibility p(b|a)
 def trans_a_b(trans, a, b):
     if a in trans:
         if b in trans[a]:
@@ -106,6 +107,7 @@ class GodTian_Pinyin(object):
 
         topp =100
 
+        # use trie tree to get the prefix
         prefix_ans = {}
         self.pt.get_totalwords_of_prefix(self.pt.root,pylist[0], prefix_ans)
         sorted_pf_ans = sorted(prefix_ans.items(), key=lambda x: x[1], reverse=True)
@@ -127,8 +129,8 @@ class GodTian_Pinyin(object):
 
         for t in range(START, pylislen):
             cur_obs = pylist[t]
-            print "---------------"
-            print pylist,t,pylist[t]
+            print ("---------------")
+            print (pylist,t,pylist[t])
             idx = t % 2
             V[idx] = {}
             prev_states = cur_cand_states
@@ -250,13 +252,13 @@ class GodTian_Pinyin(object):
             return best_viterbi_ans, two_part
         elif may_parts:
             new_viterbi_ans = serch_in_dict(pyl,self.dict)
-            print new_viterbi_ans
+            print (new_viterbi_ans)
             if new_viterbi_ans ==[]:
                new_viterbi_ans = self.newviterbi(pyl, topv)
             return new_viterbi_ans,two_part
         else:
             viterbi_ans = self.viterbi(pyl, topv, [])
-            print viterbi_ans
+            print (viterbi_ans)
             return viterbi_ans, two_part
 
 

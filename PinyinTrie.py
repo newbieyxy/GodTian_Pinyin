@@ -6,7 +6,8 @@ Description: Trie for pinyin split
 Date: 2016-11-12
 Author: QIU HU
 """
-from Queue import PriorityQueue
+# from Queue import PriorityQueue
+from queue import PriorityQueue
 import pickle as pickle
 
 

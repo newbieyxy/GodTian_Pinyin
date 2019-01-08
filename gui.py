@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
-from Tkinter import *
-
+# from Tkinter import * # origin
+import tkinter
+from tkinter.constants import *
 import re
 from GodTian_Pinyin import GodTian_Pinyin
 
@@ -20,13 +21,15 @@ def update():
 
 
 def shurufa(event):
-    command = event.keysym
+    command = event.keysym # check the ket event
     m1 = re.match(r'[a-z\']', event.char)   # True / False
     m2 = re.match(r'\d',event.char)
     global py, result, a, id, page, display
     print(len(py))
     if m1:  # 输入的字母
+        print("command is pinyin")
         py.append(m1.group())
+        print("m1 group {}".format(m1.group()))
         var.set("".join(py))
         if "".join(py) not in godtian.cache:
             hz, two_part = godtian.handle_current_input("".join(py), 15, 15)
@@ -38,6 +41,7 @@ def shurufa(event):
         id = update()
 
     elif command == 'Return':
+        print("command is Return!")
         if len(py) > 0:
             if "".join(py) not in godtian.cache:
                 hz, two_part = godtian.handle_current_input("".join(py), 15, 15)
@@ -101,21 +105,28 @@ if __name__ == '__main__':
     result = []
     display=[]
     godtian = GodTian_Pinyin()
-    root = Tk()
+    # root = Tk()
+    root = tkinter.Tk()
     root.title("天神输入法")
-    var = StringVar()
+    # var = StringVar()
+    var = tkinter.StringVar()
 
-    text=Text(root,yscrollcommand=1)
+
+    # text=Text(root,yscrollcommand=1)
+    text=tkinter.Text(root,yscrollcommand=1)
     text.pack(side=TOP, expand=YES, fill=X)
     text.bind("<Shift_L>",shift)
 
-    label=Label(root, textvariable=var)
+    # label=Label(root, textvariable=var)
+    label=tkinter.Label(root, textvariable=var)
     label.pack(side=BOTTOM, fill=X)
-
-    canv = Canvas(root, width=400, height=100)
+    
+    # canv = Canvas(root, width=400, height=100)
+    canv = tkinter.Canvas(root, width=400, height=100)
     canv.pack(side=BOTTOM, expand=YES, fill=X)
 
-    input = Text(canv)
+    # input = Text(canv)
+    input = tkinter.Text(canv)
     canv.focus_set()
     canv.bind("<Key>", shurufa)
     root.mainloop()
