@@ -8,7 +8,8 @@ Author: QIU HU
 """
 
 from pypinyin import lazy_pinyin, NORMAL
-import cPickle as pickle
+# import cPickle as pickle
+import pickle
 import collections
 from math import log
 import os
@@ -209,6 +210,7 @@ def train_new():
         line = line.decode("utf-8")
 
         line = line.split(" ")
+        print("line ", line)
         if len(line)>1:
             line1 = line[0]
             freq = line[1]
