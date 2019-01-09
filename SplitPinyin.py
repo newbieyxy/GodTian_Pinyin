@@ -568,29 +568,29 @@ class SplitPinyin(object):
             tmp = ""
             i = 0
             while i < length:
+                # 将所有的大写都转成小写
+                if "A" <= input[i] <= "Z":
+                    input = input.replace(input[i], input[i].lower())
+                    
                 attempt = tmp + input[i]
-                print("tmp {} 和input[i] {} 组成 attempt {}".format(tmp, input[i], attempt))
+                # print("tmp {} 和input[i] {} 组成 attempt {}".format(tmp, input[i], attempt))
                 if attempt not in self.pinyin and attempt not in self.prefix:
-                    print("--|attempt {} 不在拼音且前缀中".format(attempt))
+                    # print("--|attempt {} 不在拼音且前缀中".format(attempt))
                     if tmp in self.pinyin: # The former part is pinyin
-                        print("----|tmp {} 在拼音中，更新tmp为 {}".format(tmp, input[i]))
+                        # print("----|tmp {} 在拼音中，更新tmp为 {}".format(tmp, input[i]))
                         res_list.append(tmp)
                         tmp = input[i] # The the current char will be the start of attempt
                     else:
-                        print("----||tmp {} 不在拼音中".format(tmp))
+                        # print("----||tmp {} 不在拼音中".format(tmp))
                         now_idx = i
                         now_tmp = tmp
                         
                         ###############
-                        # maybe useless
-                        # while len(tmp) > 0 and tmp not in self.pinyin: 
-                        #     tmp = tmp[:-1] # tmp一直取它最后一个字符之前的所有拼音
-                        #     i -= 1
+                        # 在这种情况下，tmp只可能是单个字符或sh
+                        while len(tmp) > 0 and tmp not in self.pinyin: 
+                            tmp = tmp[:-1] # tmp一直取它最后一个字符之前的所有拼音
+                            i -= 1
                         
-                        # 在这种情况下，tmp只可能是单个字符
-                        if len(tmp)>0 and tmp not in self.pinyin:
-                            tmp = tmp[:-1] # 取空
-                            # i-=1 # useless
                             
                         # two_part 和 many_part：不完整的拼音出现的地方
                         # 如果是two part，就是最后一个字符是不完整的拼音(其他地方可能也有)；
@@ -600,22 +600,22 @@ class SplitPinyin(object):
                             if idx == len(input_lis) - 1 and input[now_idx] == '$':  # 最后了
                                 res_list.append(now_tmp)
                                 two_part = True
-                                print("----||two_part=True")
+                                # print("----||two_part=True")
                                 break
                             else:
                                 res_list.append(now_tmp[0]) # now_tmp[0]实际上是tmp
-                                # i += 1 # useless
-                                print("----||many_part=True")
+                                i += 1
+                                # print("----||many_part=True")
                                 many_part = True
 
                         if many_part == False:
-                            print("----||many_part=False")
+                            # print("----||many_part=False")
                             res_list.append(tmp)
                         tmp = input[i]
-                        print("----||更新tmp为 {}".format(input[i]))
+                        # print("----||更新tmp为 {}".format(input[i]))
                 else:
-                    print("--||attempt {} 在拼音或者前缀中".format(attempt))
-                    print("--||更新tmp为 {}".format(attempt))
+                    # print("--||attempt {} 在拼音或者前缀中".format(attempt))
+                    # print("--||更新tmp为 {}".format(attempt))
                     tmp = attempt
                 i += 1
         
@@ -629,4 +629,4 @@ class SplitPinyin(object):
 if __name__ == '__main__':
 
     a = SplitPinyin()
-    print(a.split_pinyin("k't'haq"))
+    print(a.split_pinyin("wsh"))
