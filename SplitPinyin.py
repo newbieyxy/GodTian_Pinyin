@@ -42,11 +42,7 @@ class SplitPinyin(object):
             length = len(input)
             tmp = ""
             i = 0
-            while i < length:
-                # 将所有的大写都转成小写
-                if "A" <= input[i] <= "Z":
-                    input = input.replace(input[i], input[i].lower())
-                    
+            while i < length:                    
                 attempt = tmp + input[i]
                 # print("tmp {} 和input[i] {} 组成 attempt {}".format(tmp, input[i], attempt))
                 if attempt not in self.pinyin and attempt not in self.prefix:

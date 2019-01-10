@@ -22,7 +22,7 @@ def update():
 
 def shurufa(event):
     command = event.keysym # check the ket event
-    m1 = re.match(r'[a-z\']', event.char)   # True / False
+    m1 = re.match(r'[a-zA-Z\']', event.char)   # True / False，包括小写和大写字母以及分隔符
     m2 = re.match(r'\d',event.char)
     global py, result, a, id, page, display
     print(len(py))

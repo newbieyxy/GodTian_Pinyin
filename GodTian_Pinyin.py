@@ -127,8 +127,8 @@ class GodTian_Pinyin(object):
             for state in cur_cand_states:
                 tao = Pi_state(self.Pi, state) + emit_a_b_many(self.emit, state, cur_obs)
                 _path = [state]
-                V[0].setdefault(state, PrioritySet(top))  # {...,'汉字':[]}
-                V[0][state] = PrioritySet(top) # {...,'汉字':[]}
+                V[0].setdefault(state, PrioritySet(use_top))  # {...,'汉字':[]}
+                V[0][state] = PrioritySet(use_top) # {...,'汉字':[]}
                 V[0][state].put(tao, _path)# {...,'汉字':[<score, path>]}
         elif mode == "two_part":
             pre_pyseq = "".join(pylist[:-1]) # 将前面完整的拼音部分组合到一起            
@@ -146,8 +146,8 @@ class GodTian_Pinyin(object):
                 for state in cur_cand_states:
                     tao = Pi_state(self.Pi, state) + emit_a_b_many(self.emit, state, cur_obs)
                     _path = [state]
-                    V[0].setdefault(state, PrioritySet(top))
-                    V[0][state] = PrioritySet(top)
+                    V[0].setdefault(state, PrioritySet(use_top))
+                    V[0][state] = PrioritySet(use_top)
                     V[0][state].put(tao, _path)
                 
         res = self.viterbi(pylist, START, V, cur_cand_states, use_top, use_topp, use_words, use_mode)
@@ -162,6 +162,7 @@ class GodTian_Pinyin(object):
         # 将前topp个结果赋给cur_cand_states作为可能状态（即可能的汉字）
         # 状态即为汉字
         pylist_len = len(pylist)
+        idx = 0
         for t in range(START, pylist_len): # 状态的时刻
             cur_obs = pylist[t]
             idx = t % 2 # 存储V的索引
@@ -212,6 +213,7 @@ class GodTian_Pinyin(object):
         pickle.dump(dict(self.memo), open('memo.mm', 'wb'), True)
 
     def handle_current_input(self, input, topv=15, topp=15):
+        # 将所有的大写都转成小写
         input = input.lower()
         if self.pat.findall(input):   # 全数字，直接返回
             return input
