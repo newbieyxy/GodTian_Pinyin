@@ -14,11 +14,30 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--test-acc", type=str, default="top5", help="test mode: top5 or top10")
-parser.add_argument("--mode", type=str, default="single", help="test method: single(one word) or phrase(more than one word)")
+parser.add_argument("--test-mode", type=str, default="single", help="test method: single(one word) or phrase(more than one word)")
 args = parser.parse_args()
 
 def no_pinyin(ch):
     return ' '
+
+# for debug viterbi 
+def debug_test(godtian):
+    py_data = ["Da","nihaoy"]
+    # 对整个词组进行测试
+    test_num = 0
+    # correct_num = 0
+    for phrase_idx  in range(len(py_data)):
+        test_num += 1
+        py = "".join(py_data[phrase_idx])
+        if py not in godtian.cache:
+            hz, two_part = godtian.handle_current_input(py, 15, 15)
+            godtian.cache[py] = hz
+        else:
+            print("py存在cache中")
+            hz = godtian.cache[py]
+    
+    return None, test_num
+
 
 # 测试集为多个句子，将其中的字一个一个提取出来进行测试
 def single_word_test(file_path, godtian):
@@ -89,9 +108,9 @@ def combination_test(file_path, godtian):
             hz_data.append(word)
                        
         i += 1
-        if i>=1000:
-            print("hz_data",hz_data)
-            print("py_data",py_data)
+        if i>=2:
+        #     print("hz_data",hz_data)
+        #     print("py_data",py_data)
             break
     
     # 对整个词组进行测试
@@ -126,12 +145,14 @@ def combination_test(file_path, godtian):
 
 if __name__ == "__main__":
     godtian = GodTian_Pinyin()
-    if args.mode == "single":
+    if args.test_mode == "single":
         file_path = "./test_dataset/sentence.txt"
         correct_rate, test_num = single_word_test(file_path, godtian)
-    elif args.mode == "phrase":
+    elif args.test_mode == "phrase":
         file_path = "./test_dataset/sogou_dic_new.txt"
         correct_rate, test_num = combination_test(file_path, godtian)
+    elif args.test_mode == "debug":
+        correct_rate, test_num = debug_test(godtian)
     else:
         raise Exception
-    print("完成{}个样本的测试，测试模式{}，测试精度{}，准确率为{}".format(test_num, args.mode, args.test_acc, correct_rate))
+    print("完成{}个样本的测试，测试模式{}，测试精度{}，准确率为{}".format(test_num, args.test_mode, args.test_acc, correct_rate))

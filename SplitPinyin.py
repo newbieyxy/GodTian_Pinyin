@@ -10,7 +10,6 @@ import pinyin_record
 
 class SplitPinyin(object):
 
-
     def __init__(self):
         pinyin_and_pf = pinyin_record.pinyin_record()
         self.pinyin, self.prefix = pinyin_and_pf.get_record()

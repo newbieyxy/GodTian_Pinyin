@@ -73,7 +73,7 @@ def serch_in_dict(pylist, prefix_str_dict):
     else:
         return []
 
-class GodTian_Pinyin(object):
+class Pinyin2Hanzi(object):
 
     def __init__(self):
         self.Pi = pickle.load(open('Pi.mat', 'rb'))
@@ -259,7 +259,7 @@ class GodTian_Pinyin(object):
 # if __name__ == '__main__':
 #
 #     a = sp.SplitPinyin()
-#     godtian = GodTian_Pinyin()
+#     godtian = Pinyin2Hanzi()
 #
 #     while True:
 #         input2 = input("input: ")
