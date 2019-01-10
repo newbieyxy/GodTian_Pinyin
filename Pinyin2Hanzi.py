@@ -244,17 +244,17 @@ class Pinyin2Hanzi(object):
             end = time.time()
             print("VITERBI COST: {}".format(end-start))
             best_viterbi_ans.extend(viterbi_ans)
-            return best_viterbi_ans, two_part
+            return best_viterbi_ans
         elif many_parts: # 中间的拼音也是不完整的
             new_viterbi_ans = serch_in_dict(py_list,self.dict)
             if new_viterbi_ans ==[]:
                # new_viterbi_ans = self.newviterbi(pyl, topv, mode="many_part")
                new_viterbi_ans = self.use_viterbi(py_list, topv, mode="many_part")
-            return new_viterbi_ans,two_part
+            return new_viterbi_ans
         else: # 所有拼音都是完整的
             # viterbi_ans = self.viterbi(pyl, topv, [])
             viterbi_ans = self.use_viterbi(py_list, topv, mode="two_part")
-            return viterbi_ans, two_part
+            return viterbi_ans
 
 # if __name__ == '__main__':
 #

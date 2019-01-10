@@ -33,12 +33,13 @@ def shurufa(event):
         py_str = "".join(py)
         var.set("".join(py))
         if "".join(py) not in py2hz.cache:
-            hz, two_part = py2hz.handle_current_input(py_str, 15, 15)
+            hz = py2hz.handle_current_input(py_str, 15, 15)
             py2hz.cache["".join(py)] = hz
         else:
             hz = py2hz.cache["".join(py)]
         # hz, two_part = godtian.handle_current_input("".join(py), 15, 5)
-        result = ["".join(i.path) for _, i in enumerate(hz)]
+        #result = ["".join(i.path) for _, i in enumerate(hz)]
+        result = ["".join(i.path) for i in hz]
         id = update()
 
     # elif command == 'Return':
@@ -69,7 +70,7 @@ def shurufa(event):
             py.pop(-1)
             var.set("".join(py))
             if "".join(py) not in py2hz.cache:
-                hz, two_part = py2hz.handle_current_input("".join(py), 15, 15)
+                hz = py2hz.handle_current_input("".join(py), 15, 15)
                 py2hz.cache["".join(py)] = hz
             else:
                 hz = py2hz.cache["".join(py)]
