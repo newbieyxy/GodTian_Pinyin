@@ -66,12 +66,11 @@ class PinyinTrie(object):
             self.dfs_all(node.child[ch], hzlist)
 
     def dfs_display(self, node, py):
-        if node.v:
+        # if node.v:
             # print(py + ": ")
             # for key in node.v.keys():
             #     print key,
             #     print(node.v[key])
-            print(node.v)
         for ch in "abcdefghijklmnopqrstuvwxyz":
             if ch in node.child:
                 self.dfs_display(node.child[ch], py+ch)
