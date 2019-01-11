@@ -223,26 +223,26 @@ class Pinyin2Hanzi(object):
             return '' #这里还要改，和后面GUI的一起
         if two_part == True and many_parts == False: # 只有最后一组拼音是不完整的
             prefix_ans = {}
-            start = time.time()
+            # start = time.time()
             self.pt.get_totalwords_of_prefix(self.pt.root, py_list[-1], prefix_ans)
             sorted_pf_ans = sorted(prefix_ans.items(), key=lambda x: x[1], reverse=True)
-            end = time.time()
-            print("GET PREFIX COST: {}".format(end-start))
+            # end = time.time()
+            # print("GET PREFIX COST: {}".format(end-start))
             # 得到最后一个拼音的前缀字符，对应的topp个最有可能的字
             words = [hz_freq[0] for hz_freq in sorted_pf_ans[:topp]]
             best_viterbi_ans = []
             # 将每个字对应的拼音用lazy_pinyin方法得出
             pinyins = map(lambda x: lazy_pinyin(x)[0], words)
             viterbi_ans = []
-            start = time.time()
+            # start = time.time()
             for _, py in enumerate(pinyins):
                 # 修改原本的拼音list，将最后一个拼音改为最后一个字可能的选择 对应的拼音
                 # 保证字和拼音是一致的
                 py_list[-1] = py
                 # viterbi_ans = self.viterbi(pyl, topv, [words[_]])  # self.memo["".join(pyl[:-1]][state...] =
                 viterbi_ans = self.use_viterbi(py_list, topv, [words[_]], mode="two_part")
-            end = time.time()
-            print("VITERBI COST: {}".format(end-start))
+            # end = time.time()
+            # print("VITERBI COST: {}".format(end-start))
             best_viterbi_ans.extend(viterbi_ans)
             return best_viterbi_ans
         elif many_parts: # 中间的拼音也是不完整的
